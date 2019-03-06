@@ -60,6 +60,7 @@
                                          nil))
                                    load-path))))))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; By default Emacs triggers garbage collection at ~0.8MB which makes
 ;; startup really slow. Since most systems have at least 64MB of memory,
@@ -103,6 +104,7 @@
 (when (and (not (eq system-type 'darwin)) (fboundp 'menu-bar-mode))
 (menu-bar-mode -1))
 
+
 ;; Remove trailing white space upon saving
 ;; Note: because of a bug in EIN we only delete trailing whitespace
 ;; when not in EIN mode.
@@ -111,9 +113,9 @@
             (when (not (derived-mode-p 'ein:notebook-multilang-mode))
 	      (delete-trailing-whitespace))))
 ;; Auto-wrap at 80 characters
-(setq-default auto-fill-function 'do-auto-fill)
-(setq-default fill-column 80)
-(turn-on-auto-fill)
+;;(setq-default auto-fill-function 'do-auto-fill)
+;;(setq-default fill-column 80)
+;;(turn-on-auto-fill)
 ;; Disable auto-fill-mode in programming mode
 (add-hook 'prog-mode-hook (lambda () (auto-fill-mode -1)))
 
@@ -629,11 +631,13 @@
       (dolist (v google-c-style)
         (when (and (listp v) (eq (car v) 'c-basic-offset))
           (setcdr v 4))))
-    ;; This prevents the extra two spaces in a namespace that Emacs
+    ;; Orig author: This prevents the extra two spaces in a namespace that Emacs
     ;; otherwise wants to put... Gawd!
-    (add-hook 'c-mode-common-hook 'google-set-c-style)
+    ;; Me: This line caused google-c-style to apply 2 spaces always instead
+    ;; of my 4 spaces
+    ;;(add-hook 'c-mode-common-hook 'google-set-c-style)
     ;; Autoindent using google style guide
-    (add-hook 'c-mode-common-hook 'google-make-newline-indent)
+    ;;(add-hook 'c-mode-common-hook 'google-make-newline-indent)
     )
   )
 
@@ -664,6 +668,10 @@
 
 ;; Enable hide/show of code blocks
 (add-hook 'c-mode-common-hook 'hs-minor-mode)
+
+(use-package qt-pro-mode
+  :ensure t
+  :mode ("\\.pro\\'" "\\.pri\\'"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package: ycmd (YouCompleteMeDaemon)
@@ -809,9 +817,10 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
   :config
   (setq org-log-done 'time
       org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
-      org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold)))
+      org-todo-keyword-faces '(("INPROGRESS" . (:foreground "red" :weight bold)))
       org-agenda-files (list "~/org/todo.org"
-                             "~/org/linux.org")
+                             "~/org/linux.org"
+                             "~/org/cody.org")
       org-tag-alist '((:startgroup . nil)
                       ("@work" . ?w) ("@home" . ?h)
                       ("@out" . ?o)
@@ -839,10 +848,48 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
     (declare-function writegood-mode "writegood-mode.el"))
   (add-hook 'org-mode-hook #'writegood-mode)
   )
+(use-package ox-twbs
+  :ensure t)
+(setq org-ellipsis " ▼ ")
+
+(use-package org-trello
+  :ensure t)
 
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
 ;;(define-key eww-mode-map (kbd "o") #'org-eww-copy-for-org-mode)
+
+(use-package htmlize
+  :ensure t)
+
+
+(require 'ox-publish)
+(setq org-publish-project-alist
+      '(
+
+       ;; ... add all the components here (see below)...
+        ("org-notes"
+         :base-directory "~/org/"
+         :base-extension "org"
+         :publishing-directory "~/public_html/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :headline-levels 1             ; Just the default for this project.
+         :auto-preamble t
+         )
+
+        ("org-static"
+         :base-directory "~/org/"
+         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+         :publishing-directory "~/public_html/"
+         :recursive t
+         :publishing-function org-publish-attachment
+         )
+
+        ("org" :components ("org-notes" "org-static"))
+
+      ))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vlf - handle open very large files
@@ -857,14 +904,15 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
   :ensure t
   :mode (("\\.phtml\\'" . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
-         ("\\.[agj]sp\\'" . web-mode)
+         ("\\.[agj]Sp\\'" . web-mode)
          ("\\.as[cp]x\\'" . web-mode)
          ("\\.erb\\'" . web-mode)
          ("\\.mustache\\'" . web-mode)
          ("\\.djhtml\\'" . web-mode)
          ("\\.html?\\'" . web-mode))
   )
-
+(use-package drupal-mode
+  :ensure t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; autopair
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1235,7 +1283,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 (use-package doom-modeline
       :ensure t
       :defer t
-      :hook (after-init . doom-modeline-init))
+      :config (setq doom-modeline-github nil)
+      :hook (after-init . doom-modeline-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Powerline theme
@@ -1316,9 +1365,6 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 ;; (emms-default-players)
 
 (require 'req-package)
-
-(use-package all-the-icons
-  :ensure t)
 
 ;; init-dired.el
 
@@ -1469,14 +1515,53 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 (setq shr-external-rendering-functions
       '((pre . eww-tag-pre)))
 
+;; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
+(setq utf-translate-cjk-mode nil)
+
+(set-language-environment 'utf-8)
+(setq locale-coding-system 'utf-8)
+
+;; set the default encoding system
+(prefer-coding-system 'utf-8)
+(setq default-file-name-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+;; backwards compatibility as default-buffer-file-coding-system
+;; is deprecated in 23.2.
+(if (boundp buffer-file-coding-system)
+    (setq buffer-file-coding-system 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8))
+
+;; Treat clipboard input as UTF-8 string first; compound text next, etc.
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
 (use-package alert
   :commands (alert)
   :init
   (setq alert-default-style 'notifier))
 
-(add-hook 'c++-mode-hook
-  (lambda ()
-    (display-line-numbers-mode 1)))
+;; (add-hook 'c++-mode-hook
+;;   (lambda ()
+;;     (display-line-numbers-mode 1)))
+(global-linum-mode 1)
+
+(setq linum-mode-inhibit-modes-list '(eshell-mode
+                                      org-mode
+                                      shell-mode
+                                      erc-mode
+                                      jabber-roster-mode
+                                      jabber-chat-mode
+                                      gnus-group-mode
+                                      gnus-summary-mode
+                                      gnus-article-mode))
+
+(defadvice linum-on (around linum-on-inhibit-for-modes)
+  "Stop the load of linum-mode for some major modes."
+    (unless (member major-mode linum-mode-inhibit-modes-list)
+      ad-do-it))
+
+(ad-activate 'linum-on)
 
 (provide '.emacs)
 ;;; .emacs ends here
