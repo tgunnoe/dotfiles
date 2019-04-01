@@ -816,20 +816,47 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 (use-package org
   :config
   (setq org-log-done 'time
-      org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
+      org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "INPROGRESS(c)" "CANCELLED(c)" "DONE(d)"))
       org-todo-keyword-faces '(("INPROGRESS" . (:foreground "red" :weight bold)))
-      org-agenda-files (list "~/org/todo.org"
-                             "~/org/linux.org"
-                             "~/org/cody.org")
+      org-agenda-files (list "~/org/inbox.org"
+                             "~/org/gtd.org"
+                             "~/org/tickler.org")
       org-tag-alist '((:startgroup . nil)
                       ("@work" . ?w) ("@home" . ?h)
                       ("@out" . ?o)
+                      (:endgroup . nil)
+                      (:startgroup . nil)
+                      ("!paid" . ?p) ("!unpaid" . ?u)
                       (:endgroup . nil)
                       ("bitcoin") ("emacs") ("linux") ("books") ("gaming") ("programming") ("free software") ("open hardware")
                       ("research") ("study") ("review") ("code") ("design")
                       ("exercise") ("meet")))
   :hook (org-mode . org-indent-mode)
   )
+
+;; lets start using GTD methodology
+(setq org-capture-templates '(("t" "Todo [inbox]" entry
+                               (file+headline "~/org/inbox.org" "Tasks")
+                               "* TODO %i%?")
+                              ("T" "Tickler" entry
+                               (file+headline "~/org/tickler.org" "Tickler")
+                               "* %i%? \n %U")))
+(setq org-refile-targets '((nil :maxlevel . 9)
+                           (org-agenda-files :maxlevel . 9)
+                           ;;("~/org/gtd.org" :maxlevel . 3)
+                           ("~/org/someday.org" :level . 2)))
+                           ;;("~/org/tickler.org" :maxlevel . 2)))
+
+(setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
+(setq org-refile-use-outline-path t)                  ; Show full paths for refiling
+
+(setq org-default-notes-file (concat org-directory "/inbox.org"))
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+
+;;(define-key eww-mode-map (kbd "o") #'org-eww-copy-for-org-mode)
+
 
  (use-package org-bullets
    :ensure t
@@ -850,18 +877,14 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
   )
 (use-package ox-twbs
   :ensure t)
+
 (setq org-ellipsis " ▼ ")
 
 (use-package org-trello
   :ensure t)
 
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-;;(define-key eww-mode-map (kbd "o") #'org-eww-copy-for-org-mode)
-
 (use-package htmlize
   :ensure t)
-
 
 (require 'ox-publish)
 (setq org-publish-project-alist
@@ -912,6 +935,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
          ("\\.html?\\'" . web-mode))
   )
 (use-package drupal-mode
+  :ensure t)
+(use-package twig-mode
   :ensure t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; autopair
@@ -1541,27 +1566,30 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
   :init
   (setq alert-default-style 'notifier))
 
-;; (add-hook 'c++-mode-hook
-;;   (lambda ()
-;;     (display-line-numbers-mode 1)))
-(global-linum-mode 1)
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
 
-(setq linum-mode-inhibit-modes-list '(eshell-mode
-                                      org-mode
-                                      shell-mode
-                                      erc-mode
-                                      jabber-roster-mode
-                                      jabber-chat-mode
-                                      gnus-group-mode
-                                      gnus-summary-mode
-                                      gnus-article-mode))
+(add-hook 'org-mode-hook
+   (lambda ()
+     (display-line-numbers-mode 0)))
+;; (global-linum-mode 1)
 
-(defadvice linum-on (around linum-on-inhibit-for-modes)
-  "Stop the load of linum-mode for some major modes."
-    (unless (member major-mode linum-mode-inhibit-modes-list)
-      ad-do-it))
+;; (setq linum-mode-inhibit-modes-list '(eshell-mode
+;;                                       org-mode
+;;                                       shell-mode
+;;                                       erc-mode
+;;                                       jabber-roster-mode
+;;                                       jabber-chat-mode
+;;                                       gnus-group-mode
+;;                                       gnus-summary-mode
+;;                                       gnus-article-mode))
 
-(ad-activate 'linum-on)
+;; (defadvice linum-on (around linum-on-inhibit-for-modes)
+;;   "Stop the load of linum-mode for some major modes."
+;;     (unless (member major-mode linum-mode-inhibit-modes-list)
+;;       ad-do-it))
+
+;; (ad-activate 'linum-on)
 
 (provide '.emacs)
 ;;; .emacs ends here
