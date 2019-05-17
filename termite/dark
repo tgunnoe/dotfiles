@@ -1,0 +1,54 @@
+[options]
+audible_bell = false
+clickable_url = true
+dynamic_title = true
+font = Ubuntu Mono 15
+fullscreen = true
+#mouse_autohide = true
+scrollback_lines = 10000
+browser = basilisk
+size_hints = true
+filter_unmatched_urls = true
+scrollbar = right
+
+[colors]
+cursor = #2d4944
+cursor_foreground = #6a605c
+foreground = #b3bf96
+#background = #0e1713
+background = rgba(0,0,0,.60)
+highlight = #2f1a21
+
+# black
+color0= #241323
+color8= #1f132d
+
+# red
+color1= #625a64
+color9= #47414f
+
+# Green
+color2 = #40745c
+color10 = #64a474
+
+# Yellow
+color3= #acd8bb
+color11= #000000
+
+# Blue
+color4 = #203b5c
+color12 = #40547c
+
+# Magenta
+color5 =  #8c7c9c
+color13 = #625a64
+
+# Cyan
+color6 = #55d0d6
+color14 = #5296ad
+
+# White
+color7=  #CCCCCC
+color15= #DDDDDD
+
+[hints]

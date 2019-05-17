@@ -9,45 +9,54 @@ scrollback_lines = 10000
 browser = basilisk
 size_hints = true
 filter_unmatched_urls = true
+scrollbar = none
 
 [colors]
-cursor = #2d4944
-cursor_foreground = #6a605c
-foreground = #b3bf96
-#background = #0e1713
-background = rgba(0,0,0,.60)
-highlight = #2f1a21
+# Base16 Pop
+# Author: Chris Kempson (http://chriskempson.com)
 
-# black
-color0= #131f1a
-color8= #16221d
+foreground          = #d0d0d0
+foreground_bold     = #e0e0e0
+cursor              = #e0e0e0
+cursor_foreground   = #000000
+background          = rgba(0, 0, 0, 0.6)
 
-# red
-color1= #89784b
-color9= #938050
+# 16 color space
+
+# Black, Gray, Silver, White
+color0  = #000000
+color8  = #505050
+color7  = #d0d0d0
+color15 = #ffffff
+
+# Red
+color1  = #eb008a
+color9  = #eb008a
 
 # Green
-color2 = #596b43
-color10 = #60724a
+color2  = #37b349
+color10 = #37b349
 
 # Yellow
-color3= #747d55
-color11= #7d865e
+color3  = #f8ca12
+color11 = #f8ca12
 
 # Blue
-color4 = #34504b
-color12 = #3e5c57
+color4  = #0e5a94
+color12 = #0e5a94
 
-# Magenta
-color5 =  #344450
-color13 = #3a4b57
+# Purple
+color5  = #b31e8d
+color13 = #b31e8d
 
-# Cyan
-color6 = #35645e
-color14 = #336c65
+# Teal
+color6  = #00aabb
+color14 = #00aabb
 
-# White
-color7=  #b1ba8d
-color15= #bfc89d
-
-[hints]
+# Extra colors
+color16 = #f29333
+color17 = #7a2d00
+color18 = #202020
+color19 = #303030
+color20 = #b0b0b0
+color21 = #e0e0e0

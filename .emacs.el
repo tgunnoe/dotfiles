@@ -95,7 +95,10 @@
 (setq-default case-fold-search t ;case insensitive searches by default
               search-highlight t) ;hilit matches when searching
 ;; Highlight the line we are currently on
-(global-hl-line-mode t)
+;; (global-hl-line-mode t)
+
+;; turn on mouse!!
+(xterm-mouse-mode t)
 
 ;; Disable the toolbar at the top since it's useless
 (if (functionp 'tool-bar-mode) (tool-bar-mode -1))
@@ -855,6 +858,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 (define-key global-map "\C-ca" 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
+(setq org-duration-format (quote h:mm))
 ;;(define-key eww-mode-map (kbd "o") #'org-eww-copy-for-org-mode)
 
 
@@ -937,6 +941,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 (use-package drupal-mode
   :ensure t)
 (use-package twig-mode
+  :ensure t)
+(use-package handlebars-mode
   :ensure t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; autopair
@@ -1084,7 +1090,13 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package json-mode
   :ensure t
-:mode (".json" ".imp"))
+  :mode (".json" ".imp"))
+
+(add-hook 'json-mode-hook
+          (lambda ()
+            (make-local-variable 'js-indent-level)
+            (setq js-indent-level 2)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup Dockerfile mode
@@ -1196,10 +1208,10 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
  ;;   :config
  ;;   (load-theme 'sourcerer t))
 
- (use-package doom-themes
-   :ensure t
-   :config
-   (load-theme 'doom-city-lights t))
+ ;; (use-package doom-themes
+ ;;   :ensure t
+ ;;   :config
+ ;;   (load-theme 'doom-city-lights t))
 
 (scroll-bar-mode 0)
 
@@ -1314,6 +1326,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Powerline theme
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package telephone-line
+  :ensure t)
 ;; powerline theme where the modes are on the right side.
 ;; (use-package powerline
 ;;   :ensure t
