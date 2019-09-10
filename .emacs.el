@@ -845,9 +845,9 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
                                (file+headline "~/org/tickler.org" "Tickler")
                                "* %i%? \n %U")))
 (setq org-refile-targets '((nil :maxlevel . 9)
-                           (org-agenda-files :maxlevel . 9)
+                           (org-agenda-files :maxlevel . 9)))
                            ;;("~/org/gtd.org" :maxlevel . 3)
-                           ("~/org/someday.org" :level . 2)))
+                           ;;("~/org/someday.org" :level . 2)))
                            ;;("~/org/tickler.org" :maxlevel . 2)))
 
 (setq org-outline-path-complete-in-steps nil)         ; Refile in a single go
@@ -882,7 +882,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 (use-package ox-twbs
   :ensure t)
 
-(setq org-ellipsis " ▼ ")
+(setq org-ellipsis ">")
 
 (use-package org-trello
   :ensure t)
@@ -917,6 +917,7 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 
       ))
 
+(setq org-export-latex-tables-centered nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vlf - handle open very large files
@@ -936,7 +937,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
          ("\\.erb\\'" . web-mode)
          ("\\.mustache\\'" . web-mode)
          ("\\.djhtml\\'" . web-mode)
-         ("\\.html?\\'" . web-mode))
+         ("\\.html?\\'" . web-mode)
+         ("\\.twig?\\'" . web-mode))
   )
 (use-package drupal-mode
   :ensure t)
@@ -1018,10 +1020,10 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
   (add-hook 'magit-mode-hook (lambda () (setq whitespace-mode -1)))
   (setq magit-completing-read-function 'ivy-completing-read)
   )
-(use-package magit-gerrit
-  :ensure t
-  :after magit
-  )
+;; (use-package magit-gerrit
+;;   :ensure t
+;;   :after magit
+;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; GitGutter
@@ -1096,7 +1098,10 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
           (lambda ()
             (make-local-variable 'js-indent-level)
             (setq js-indent-level 2)))
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; js-mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq js-indent-level 2)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup Dockerfile mode
@@ -1151,6 +1156,9 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
 (use-package markdown-mode
   :ensure t
   :mode (".md" ".markdown"))
+
+(use-package markdown-preview-eww
+  :ensure t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; auctex
@@ -1470,6 +1478,8 @@ Please set my:ycmd-server-command appropriately in ~/.emacs.el.\n"
   :ensure t)
 
 (use-package cl-lib
+  :ensure t)
+(use-package go-mode
   :ensure t)
 
 (defun eww-tag-pre (dom)

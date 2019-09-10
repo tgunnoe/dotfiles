@@ -15,11 +15,21 @@ scrollbar = none
 # Base16 Pop
 # Author: Chris Kempson (http://chriskempson.com)
 
+
+
 foreground          = #d0d0d0
 foreground_bold     = #e0e0e0
-cursor              = #e0e0e0
-cursor_foreground   = #000000
+cursor              = #bbbbbb
+cursor_foreground   = #ffffff
 background          = rgba(0, 0, 0, 0.6)
+
+# White bg
+#foreground = #000000
+#foreground_bold     = #333333;
+#cursor              = #666666
+#cursor_foreground   = #000000
+#background          = rgba(255, 255, 255, 0.6)
+
 
 # 16 color space
 

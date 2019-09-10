@@ -1,3 +1,4 @@
+
 # i3 config file (v4)
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
@@ -17,16 +18,23 @@ input 1739:30382:DLL0704:01_06CB:76AE_Touchpad {
 }
 
 bar {
-    swaybar_command waybar
+    #swaybar_command waybar
+    status_command i3status
+    position top
+    height 40
+    font xft:Ubuntu Condensed 14
 }
 
 output * bg ~/Pictures/Wallpapers/1296328.jpg fill
 
 output DP-1 scale 1.25
+#output DP-1 scale 1
 output DP-1 resolution 3840x2160 position 0,0
 #output DP-1 resolution 1920x1080 position 0,0
+#output eDP-1 disable
 output eDP-1 scale 1.5
 output eDP-1 resolution 3200x1800 position 3072,1100
+#output eDP-1 resolution 3200x1800 position 1920,550
 
 
 # set_from_resource $darkred     color1  #000000
@@ -52,8 +60,8 @@ set $transparent #00000000
 # workspace_layout tabbed <stacking|tabbed>
 
 # Configure border style <normal|1pixel|pixel xx|none|pixel>
-new_window pixel 1
-new_float normal
+default_border pixel 1
+default_floating_border normal
 
 # Hide borders
 hide_edge_borders none
@@ -190,8 +198,8 @@ bindsym $mod+Ctrl+b workspace prev
 #                 set $ws2 2:
 set $ws1 1: ❪❪❪emacs❫❫❫
 set $ws2 2:  browse
-set $ws3 3
-set $ws4 4
+set $ws3 3: Files
+set $ws4 4: ⚩ Text
 set $ws5 5
 set $ws6 6
 set $ws7 7
@@ -324,7 +332,7 @@ mode "resize" {
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 #exec --no-startup-id manjaro-hello
-exec --no-startup-id mako
+exec_always --no-startup-id mako
 exec --no-startup-id nm-applet --indicator
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id pamac-tray
